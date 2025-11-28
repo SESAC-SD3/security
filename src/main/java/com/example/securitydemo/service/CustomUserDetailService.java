@@ -13,9 +13,10 @@ import java.io.Serializable;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService, Serializable {
+//public class CustomUserDetailService implements UserDetailsService, Serializable {
+public class CustomUserDetailService implements UserDetailsService {
 
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
     private final UserRepository userRepository;
 
     @Override
