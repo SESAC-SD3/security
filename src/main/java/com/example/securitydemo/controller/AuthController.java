@@ -48,9 +48,33 @@ public class AuthController {
             @Valid @ModelAttribute SignupDto signupDto,
             BindingResult bindingResult
     ) {
+        if (!signupDto.getPassword().equals(signupDto.getPasswordConfirm())) {
+            bindingResult.rejectValue("passwordConfirm", "mismatch", "비밀번호가 일치하지 않습니다.");
+        }
+
+        // 검증 실패
         if (bindingResult.hasErrors()) {
             return "signup";
         }
+
+        // DB 조회가 필요한 검증
+        // 아이디 중복체크
+        if (userService.existsByUsername(signupDto.getUsername())) {
+            bindingResult.rejectValue("username", "duplicate", "이미 사용중인 아이디입니다.");
+            return "signup";
+        }
+
+        // 이메일 중복체크
+        if (userService.existsByEmail(signupDto.getEmail())) {
+            bindingResult.rejectValue("email", "duplicate", "이미 사용중인 이메일입니다.");
+            return "signup";
+        }
+
+
+        // 검증 성공 => 회원가입 처리
+        userService.register(signupDto);
+
+
         return "redirect:/login";
     }
 
